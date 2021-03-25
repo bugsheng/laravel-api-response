@@ -17,7 +17,7 @@ interface JsonResponseContract
      *
      * @return mixed
      */
-    public function make($message = '', array $data = [], $serverCode = 0, $httpCode = 200, array $headers = []);
+    public function make($message = '', $data = [], $serverCode = 0, $httpCode = 200, array $headers = []);
 
     /**
      * @param array|Collection $data

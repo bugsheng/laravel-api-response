@@ -5,6 +5,8 @@ namespace BugSheng\Laravel\ApiResponse;
 
 
 use BugSheng\Laravel\ApiResponse\Contracts\JsonResponseContract;
+use BugSheng\Laravel\ApiResponse\Exceptions\InvalidArgumentException;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
@@ -19,6 +21,46 @@ class ApiJsonResponse implements JsonResponseContract
     protected $httpCode = 200;
 
     /**
+     * 业务服务码 默认 0 成功
+     *
+     * @var int
+     */
+    protected $serverCode = 0;
+
+    /**
+     * @var array|Collection
+     */
+    protected $data;
+
+    /**
+     * @var string
+     */
+    protected $message = '';
+
+    /**
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
+     * ApiJsonResponse constructor.
+     *
+     * @param string           $message
+     * @param array|Collection $data
+     * @param int              $serverCode
+     * @param int              $httpCode
+     * @param array            $headers
+     */
+    public function __construct($message = '', $data = [], $serverCode = 0, $httpCode = 200, $headers = [])
+    {
+        $this->setMessage($message);
+        $this->setData($data);
+        $this->setServerCode($serverCode);
+        $this->setHttpCode($httpCode);
+        $this->setHeaders($headers);
+    }
+
+    /**
      * 获取状态码
      *
      * @return int
@@ -31,22 +73,23 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 设置返回状态码
      *
-     * @param $httpCode
+     * @param int $httpCode
      *
      * @return $this
      */
-    public function setHttpCode($httpCode)
+    public function setHttpCode($httpCode = 200)
     {
+        if(!is_numeric($httpCode)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected a numeric, but got %s.',
+                gettype($httpCode)
+            ));
+        }
+
         $this->httpCode = $httpCode;
         return $this;
     }
 
-    /**
-     * 业务服务码 默认 0 成功
-     *
-     * @var int
-     */
-    protected $serverCode = 0;
 
     /**
      * 获取状态码
@@ -67,16 +110,23 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function setServerCode($serverCode = 0)
     {
+
+        if(!is_numeric($serverCode)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected a numeric, but got %s.',
+                gettype($serverCode)
+            ));
+        }
+
         $this->serverCode = $serverCode;
         return $this;
     }
 
-    protected $data = [];
 
     /**
      * 获取返回数据
      *
-     * @return array
+     * @return array|Collection
      */
     public function getData()
     {
@@ -86,17 +136,23 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 设置数据
      *
-     * @param array $data
+     * @param array|Collection $data
      *
      * @return $this
      */
     public function setData($data = [])
     {
+
+        if (!($data instanceof Collection || is_array($data))) {
+            throw new InvalidArgumentException(sprintf(
+                'Params data expected array or Collection, but got %s.',
+                gettype($data)
+            ));
+        }
+
         $this->data = $data;
         return $this;
     }
-
-    protected $message = '';
 
     /**
      * 获取文字提示
@@ -117,10 +173,23 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function setMessage($message = '')
     {
+
+        if(!is_string($message)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected a string, but got %s.',
+                gettype($message)
+            ));
+        }
+
         $this->message = $message;
         return $this;
     }
 
+    /**
+     * 获取发送数据
+     *
+     * @return array
+     */
     public function getSendData()
     {
         return [
@@ -130,26 +199,25 @@ class ApiJsonResponse implements JsonResponseContract
         ];
     }
 
-    protected $headers = [];
-
+    /**
+     * @return array
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     * 设置请求头
+     *
+     * @param array $headers
+     *
+     * @return $this
+     */
     public function setHeaders($headers = [])
     {
         $this->headers = $headers;
         return $this;
-    }
-
-    public function __construct($message = '', $data = [], $serverCode = 0, $httpCode = 200, $headers = [])
-    {
-        $this->setMessage($message);
-        $this->setData($data);
-        $this->setServerCode($serverCode);
-        $this->setHttpCode($httpCode);
-        $this->setHeaders($headers);
     }
 
     /**
@@ -161,7 +229,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return ApiJsonResponse
      */
-    public function make($message = '', array $data = [], $serverCode = 0, $httpCode = 200, array $headers = [])
+    public function make($message = '', $data = [], $serverCode = 0, $httpCode = 200, array $headers = [])
     {
         return new ApiJsonResponse($message, $data, $serverCode, $httpCode, $headers);
     }
@@ -219,7 +287,10 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function errorMessage($message = '', $errCode = 400)
     {
-        return $this->setData()->setServerCode($errCode)->setMessage($message ?: Error::getMsg($errCode))->sendRespond();
+        return $this->setData()
+            ->setServerCode($errCode)
+            ->setMessage($message ?: Error::getMsg($errCode))
+            ->sendRespond();
     }
 
     /**
@@ -246,7 +317,10 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function fail($data = [], $message = '', $errCode = 400)
     {
-        return $this->setData($data)->setServerCode($errCode)->setMessage($message ?: Error::getMsg($errCode))->sendRespond();
+        return $this->setData($data)
+            ->setServerCode($errCode)
+            ->setMessage($message ?: Error::getMsg($errCode))
+            ->sendRespond();
     }
 
     /**
