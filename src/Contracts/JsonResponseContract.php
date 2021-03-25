@@ -3,34 +3,32 @@
 
 namespace BugSheng\Laravel\ApiResponse\Contracts;
 
-use Illuminate\Support\Collection;
-
 interface JsonResponseContract
 {
 
     /**
-     * @param string           $message
-     * @param array|Collection $data
-     * @param int              $serverCode
-     * @param int              $httpCode
-     * @param array            $headers
+     * @param string $message
+     * @param mixed  $data
+     * @param int    $serverCode
+     * @param int    $httpCode
+     * @param array  $headers
      *
      * @return mixed
      */
     public function make($message = '', $data = [], $serverCode = 0, $httpCode = 200, array $headers = []);
 
     /**
-     * @param array|Collection $data
-     * @param string           $message
+     * @param mixed  $data
+     * @param string $message
      *
      * @return mixed
      */
     public function success($data = [], $message = '');
 
     /**
-     * @param array|Collection $data
-     * @param string           $message
-     * @param int              $errCode
+     * @param mixed  $data
+     * @param string $message
+     * @param int    $errCode
      *
      * @return mixed
      */
@@ -73,8 +71,8 @@ interface JsonResponseContract
     public function notFound(string $message = '');
 
     /**
-     * @param array|Collection $data
-     * @param string           $message
+     * @param mixed  $data
+     * @param string $message
      *
      * @return mixed
      */

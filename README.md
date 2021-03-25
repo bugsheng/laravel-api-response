@@ -18,19 +18,39 @@
 
 ### 用法
 
-```php
-// 示例查询语句
-User::where('name', 'like', '%test%')->get();
-// 完整sql获取 
-User::where('name', 'like', '%test%')->select(['*'])->sql();
+1. 方式一
 
-// 示例查询语句
-DB::table('users')->where('name', 'like', '%test%')->get();
-// 完整sql获取
-DB::table('users')->where('name', 'like', '%test%')->select(['*'])->sql();
+    Http 请求状态 都是200 成功
+    
+```php
+// 成功携带数据
+ApiRes::success(['info' => ['name' => 'Jone', 'age' => 20]], '数据获取成功');
+
+// 失败携带数据
+// 携带自定义错误码
+ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式'], 10000);
+// 不携带错误码 使用默认400错误码
+ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式'];
+
+// 成功无数据
+ApiRes::message('提交成功');
+
+// 失败无数据
+// 携带自定义错误码
+ApiRes::errorMessage('提交失败', 10001);
+// 使用默认400错误码
+ApiRes::errorMessage('提交失败');
+
 ```
 
-- 上述示例中直接的**get()**方法获取数据 实际上缺省了参数**['*']**
+2. 方式二
+```php
+\Illuminate\Http\Response::success();
+\Illuminate\Http\Response::fail();
+
+参数与方式一相同
+
+```
 
 ## 框架要求
 

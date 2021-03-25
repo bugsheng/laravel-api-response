@@ -5,10 +5,7 @@ namespace BugSheng\Laravel\ApiResponse;
 
 
 use BugSheng\Laravel\ApiResponse\Contracts\JsonResponseContract;
-use BugSheng\Laravel\ApiResponse\Exceptions\InvalidArgumentException;
-
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
 
 class ApiJsonResponse implements JsonResponseContract
 {
@@ -28,7 +25,7 @@ class ApiJsonResponse implements JsonResponseContract
     protected $serverCode = 0;
 
     /**
-     * @var array|Collection
+     * @var mixed
      */
     protected $data;
 
@@ -45,11 +42,11 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * ApiJsonResponse constructor.
      *
-     * @param string           $message
-     * @param array|Collection $data
-     * @param int              $serverCode
-     * @param int              $httpCode
-     * @param array            $headers
+     * @param string $message
+     * @param mixed  $data
+     * @param int    $serverCode
+     * @param int    $httpCode
+     * @param array  $headers
      */
     public function __construct($message = '', $data = [], $serverCode = 0, $httpCode = 200, $headers = [])
     {
@@ -79,13 +76,6 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function setHttpCode($httpCode = 200)
     {
-        if(!is_numeric($httpCode)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected a numeric, but got %s.',
-                gettype($httpCode)
-            ));
-        }
-
         $this->httpCode = $httpCode;
         return $this;
     }
@@ -110,14 +100,6 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function setServerCode($serverCode = 0)
     {
-
-        if(!is_numeric($serverCode)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected a numeric, but got %s.',
-                gettype($serverCode)
-            ));
-        }
-
         $this->serverCode = $serverCode;
         return $this;
     }
@@ -126,7 +108,7 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 获取返回数据
      *
-     * @return array|Collection
+     * @return mixed
      */
     public function getData()
     {
@@ -136,20 +118,12 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 设置数据
      *
-     * @param array|Collection $data
+     * @param mixed $data
      *
      * @return $this
      */
     public function setData($data = [])
     {
-
-        if (!($data instanceof Collection || is_array($data))) {
-            throw new InvalidArgumentException(sprintf(
-                'Params data expected array or Collection, but got %s.',
-                gettype($data)
-            ));
-        }
-
         $this->data = $data;
         return $this;
     }
@@ -173,14 +147,6 @@ class ApiJsonResponse implements JsonResponseContract
      */
     public function setMessage($message = '')
     {
-
-        if(!is_string($message)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected a string, but got %s.',
-                gettype($message)
-            ));
-        }
-
         $this->message = $message;
         return $this;
     }
@@ -221,11 +187,11 @@ class ApiJsonResponse implements JsonResponseContract
     }
 
     /**
-     * @param string           $message
-     * @param array|Collection $data
-     * @param int              $serverCode
-     * @param int              $httpCode
-     * @param array            $headers
+     * @param string $message
+     * @param mixed  $data
+     * @param int    $serverCode
+     * @param int    $httpCode
+     * @param array  $headers
      *
      * @return ApiJsonResponse
      */
@@ -296,8 +262,8 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 成功携带数据返回
      *
-     * @param array|Collection $data
-     * @param string           $message
+     * @param mixed  $data
+     * @param string $message
      *
      * @return JsonResponse
      */
@@ -309,9 +275,9 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 失败携带数据返回
      *
-     * @param array|Collection $data
-     * @param string           $message
-     * @param int              $errCode
+     * @param mixed  $data
+     * @param string $message
+     * @param int    $errCode
      *
      * @return JsonResponse
      */
@@ -365,8 +331,8 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * 表单验证异常
      *
-     * @param array|Collection $data
-     * @param string           $message
+     * @param mixed  $data
+     * @param string $message
      *
      * @return JsonResponse
      */
