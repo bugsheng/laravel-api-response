@@ -4,6 +4,8 @@
 namespace  BugSheng\Laravel\ApiResponse;
 
 
+use Illuminate\Support\Facades\Config;
+
 class Error
 {
 
@@ -16,6 +18,6 @@ class Error
 
     public static function getErrs()
     {
-        return config('apiresponse.error_code') ?? [];
+        return Config::get('apiresponse.error_code', []);
     }
 }
