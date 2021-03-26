@@ -77,6 +77,8 @@ class ServiceProvider extends LaravelServiceProvider
         $this->app->singleton(JsonResponseContract::class, function ($app) {
             return new ApiJsonResponse();
         });
+
+        $this->app->alias(Facade::class, 'ApiRes');
     }
 
 
