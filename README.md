@@ -2,6 +2,12 @@
 
 > 简单封装通用前后端分离使用接口传输数据时候的数据格式定义
 
+
+### 安装
+```shell script
+composer require bugsheng/laravel-api-response
+```
+
 ### 数据内容格式
 
 ```json
@@ -52,7 +58,7 @@ ApiRes::errorMessage('提交失败');
 
 ```
 
-## 框架要求
+### 框架要求
 
 Laravel >= 5.5
 

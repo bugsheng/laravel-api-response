@@ -1,6 +1,6 @@
 {
     "name": "bugsheng/laravel-api-response",
-	"description": "No description",
+	"description": "Laravel Lumen response api",
     "license": "MIT",
     "authors": [
         {
