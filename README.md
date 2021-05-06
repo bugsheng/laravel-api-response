@@ -30,29 +30,29 @@ composer require bugsheng/laravel-api-response
     
 ```php
 // 成功携带数据
-ApiRes::success(['info' => ['name' => 'Jone', 'age' => 20]], '数据获取成功');
+\ApiRes::success(['info' => ['name' => 'Jone', 'age' => 20]], '数据获取成功');
 
 // 失败携带数据
 // 携带自定义错误码
-ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式'], 10000);
+\ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式'], 10000);
 // 不携带错误码 使用默认400错误码
-ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式'];
+\ApiRes::fail('数据获取失败', ['notice_type' => 1, 'notice_message' => '示例方式']);
 
 // 成功无数据
-ApiRes::message('提交成功');
+\ApiRes::message('提交成功');
 
 // 失败无数据
 // 携带自定义错误码
-ApiRes::errorMessage('提交失败', 10001);
+\ApiRes::errorMessage('提交失败', 10001);
 // 使用默认400错误码
-ApiRes::errorMessage('提交失败');
+\ApiRes::errorMessage('提交失败');
 
 ```
 
 2. 方式二
 ```php
-\Illuminate\Http\Response::success();
-\Illuminate\Http\Response::fail();
+\Illuminate\Support\Facades\Response::success();
+\Illuminate\Support\Facades\Response::fail();
 
 参数与方式一相同
 
