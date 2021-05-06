@@ -58,7 +58,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     protected function setupConfig()
     {
-        $source = realpath(__DIR__.'/apiresponse.php');
+        $source = realpath(__DIR__ . '/../apiresponse.php');
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('apiresponse.php')], 'laravel-api-response');
