@@ -15,15 +15,23 @@ interface JsonResponseContract
      *
      * @return mixed
      */
-    public function make($message = '', $data = [], $serverCode = 0, $httpCode = 200, array $headers = []);
+    public function make(
+        string $message = '',
+        $data = [],
+        int $serverCode = 0,
+        int $httpCode = 200,
+        array $headers = []
+    );
 
     /**
      * @param mixed  $data
      * @param string $message
+     * @param int    $httpCode
+     * @param int    $serverCode
      *
      * @return mixed
      */
-    public function success($data = [], $message = '');
+    public function success($data = [], string $message = '', int $httpCode = 200, int $serverCode = 0);
 
     /**
      * @param mixed  $data
@@ -32,14 +40,14 @@ interface JsonResponseContract
      *
      * @return mixed
      */
-    public function fail($data = [], $message = '', $errCode = 400);
+    public function fail($data = [], string $message = '', int $errCode = 400);
 
     /**
      * @param string $message
      *
      * @return mixed
      */
-    public function message($message = '');
+    public function message(string $message = '');
 
     /**
      * @param string $message
@@ -47,7 +55,7 @@ interface JsonResponseContract
      *
      * @return mixed
      */
-    public function errorMessage($message = '', $errCode = 400);
+    public function errorMessage(string $message = '', int $errCode = 400);
 
     /**
      * @param string $message
@@ -76,7 +84,7 @@ interface JsonResponseContract
      *
      * @return mixed
      */
-    public function validatorError($data = [], $message = '表单验证不通过');
+    public function validatorError($data = [], string $message = '表单验证不通过');
 
     /**
      * @param string $message

@@ -48,8 +48,13 @@ class ApiJsonResponse implements JsonResponseContract
      * @param int    $httpCode
      * @param array  $headers
      */
-    public function __construct($message = '', $data = [], $serverCode = 0, $httpCode = 200, $headers = [])
-    {
+    public function __construct(
+        string $message = '',
+        $data = [],
+        int $serverCode = 0,
+        int $httpCode = 200,
+        array $headers = []
+    ) {
         $this->setMessage($message);
         $this->setData($data);
         $this->setServerCode($serverCode);
@@ -62,7 +67,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return int
      */
-    public function getHttpCode()
+    public function getHttpCode(): int
     {
         return $this->httpCode;
     }
@@ -74,7 +79,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function setHttpCode($httpCode = 200)
+    public function setHttpCode(int $httpCode = 200): ApiJsonResponse
     {
         $this->httpCode = $httpCode;
         return $this;
@@ -86,7 +91,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return int
      */
-    public function getServerCode()
+    public function getServerCode(): int
     {
         return $this->serverCode;
     }
@@ -98,7 +103,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function setServerCode($serverCode = 0)
+    public function setServerCode(int $serverCode = 0): ApiJsonResponse
     {
         $this->serverCode = $serverCode;
         return $this;
@@ -122,7 +127,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function setData($data = [])
+    public function setData($data = []): ApiJsonResponse
     {
         $this->data = $data;
         return $this;
@@ -133,7 +138,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -145,7 +150,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function setMessage($message = '')
+    public function setMessage(string $message = ''): ApiJsonResponse
     {
         $this->message = $message;
         return $this;
@@ -156,7 +161,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return array
      */
-    public function getSendData()
+    public function getSendData(): array
     {
         return [
             'code'    => $this->getServerCode(),
@@ -168,7 +173,7 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -180,7 +185,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function setHeaders($headers = [])
+    public function setHeaders(array $headers = []): ApiJsonResponse
     {
         $this->headers = $headers;
         return $this;
@@ -195,8 +200,13 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return ApiJsonResponse
      */
-    public function make($message = '', $data = [], $serverCode = 0, $httpCode = 200, array $headers = [])
-    {
+    public function make(
+        string $message = '',
+        $data = [],
+        int $serverCode = 0,
+        int $httpCode = 200,
+        array $headers = []
+    ): ApiJsonResponse {
         return new ApiJsonResponse($message, $data, $serverCode, $httpCode, $headers);
     }
 
@@ -205,9 +215,9 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function httpSuccess()
+    public function httpSuccess(int $successCode = 200): ApiJsonResponse
     {
-        return $this->setHttpCode(200);
+        return $this->setHttpCode($successCode);
     }
 
     /**
@@ -217,7 +227,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return $this
      */
-    public function httpFail($failCode = 400)
+    public function httpFail(int $failCode = 400): ApiJsonResponse
     {
         return $this->setHttpCode($failCode);
     }
@@ -226,7 +236,7 @@ class ApiJsonResponse implements JsonResponseContract
     /**
      * @return JsonResponse
      */
-    public function sendRespond()
+    public function sendRespond(): JsonResponse
     {
         return new JsonResponse($this->getSendData(), $this->getHttpCode(), $this->headers);
     }
@@ -238,7 +248,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function message($message = '')
+    public function message(string $message = ''): JsonResponse
     {
         return $this->setHttpCode(200)->setData()->setServerCode()->setMessage($message)->sendRespond();
     }
@@ -251,7 +261,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function errorMessage($message = '', $errCode = 400)
+    public function errorMessage(string $message = '', int $errCode = 400): JsonResponse
     {
         return $this->setData()
             ->setServerCode($errCode)
@@ -264,12 +274,18 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @param mixed  $data
      * @param string $message
+     * @param int    $httpCode
+     * @param int    $serverCode
      *
      * @return JsonResponse
      */
-    public function success($data = [], $message = '')
+    public function success($data = [], string $message = '', int $httpCode = 200, int $serverCode = 0): JsonResponse
     {
-        return $this->setHttpCode(200)->setData($data)->setServerCode()->setMessage($message ?: '请求成功')->sendRespond();
+        return $this->setHttpCode($httpCode)
+            ->setData($data)
+            ->setServerCode($serverCode)
+            ->setMessage($message ?: '请求成功')
+            ->sendRespond();
     }
 
     /**
@@ -281,7 +297,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function fail($data = [], $message = '', $errCode = 400)
+    public function fail($data = [], string $message = '', int $errCode = 400): JsonResponse
     {
         return $this->setData($data)
             ->setServerCode($errCode)
@@ -296,7 +312,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function unauthenticated(string $message = '')
+    public function unauthenticated(string $message = ''): JsonResponse
     {
         // 401 错误
         return $this->setHttpCode(401)->fail([], $message ?: Error::getMsg(401), 401);
@@ -309,7 +325,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function missScope(string $message = '')
+    public function missScope(string $message = ''): JsonResponse
     {
         // 403 错误
         return $this->setHttpCode(403)->fail([], $message ?: Error::getMsg(403), 403);
@@ -322,7 +338,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function notFound(string $message = '')
+    public function notFound(string $message = ''): JsonResponse
     {
         // 404 错误
         return $this->setHttpCode(404)->fail([], $message ?: Error::getMsg(404), 404);
@@ -336,7 +352,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function validatorError($data = [], $message = '表单验证不通过')
+    public function validatorError($data = [], string $message = '表单验证不通过'): JsonResponse
     {
         // 422 错误
         return $this->setHttpCode(422)->fail($data, $message ?: Error::getMsg(422), 422);
@@ -349,7 +365,7 @@ class ApiJsonResponse implements JsonResponseContract
      *
      * @return JsonResponse
      */
-    public function tooManyAttempts(string $message = '')
+    public function tooManyAttempts(string $message = ''): JsonResponse
     {
         // 429 错误
         return $this->setHttpCode(429)->fail([], $message ?: Error::getMsg(429), 429);
