@@ -24,7 +24,7 @@ class ServiceProvider extends LaravelServiceProvider
         });
 
         Response::macro('fail',
-            function ($message = '', $data = [], $serverCode = 400, $httpCode = 400, $headers = [], $options = 0) {
+            function ($message = '', $data = [], $serverCode = 400, $httpCode = 200, $headers = [], $options = 0) {
                 $sendData = [
                     'code'    => $serverCode,
                     'message' => $message,
@@ -43,7 +43,7 @@ class ServiceProvider extends LaravelServiceProvider
         });
 
         Response::macro('errMsg',
-            function ($message = '', $serverCode = 400, $httpCode = 400, $headers = [], $options = 0) {
+            function ($message = '', $serverCode = 400, $httpCode = 200, $headers = [], $options = 0) {
                 $sendData = [
                     'code'    => $serverCode,
                     'message' => $message,
