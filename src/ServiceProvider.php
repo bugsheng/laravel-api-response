@@ -58,15 +58,15 @@ class ServiceProvider extends LaravelServiceProvider
      */
     protected function setupConfig()
     {
-        $source = realpath(__DIR__ . '/../config/apiresponse.php');
+        $source = realpath(__DIR__ . '/../config/laravel-api-response.php');
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('apiresponse.php')], 'laravel-api-response');
+            $this->publishes([$source => config_path('laravel-api-response.php')], 'laravel-api-response');
         } elseif ($this->app instanceof LumenApplication) {
-            $this->app->configure('apiresponse');
+            $this->app->configure('laravel-api-response');
         }
 
-        $this->mergeConfigFrom($source, 'apiresponse');
+        $this->mergeConfigFrom($source, 'laravel-api-response');
     }
 
     public function register()

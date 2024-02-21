@@ -18,6 +18,6 @@ class Error
 
     public static function getErrs()
     {
-        return Config::get('apiresponse.error_code', []);
+        return Config::get('laravel-api-response.error_code', []);
     }
 }
